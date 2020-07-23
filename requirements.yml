@@ -1,0 +1,8 @@
+name: arpeggio
+channels:
+  - openbabel
+  - defaults
+dependencies:
+  - python=3.6.10
+  - biopython=1.77
+  - openbabel=2.4.1
