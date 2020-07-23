@@ -16,6 +16,7 @@
 import argparse
 import collections
 import logging
+import functools
 #import math
 import operator
 try:
@@ -23,6 +24,8 @@ try:
 except ImportError:
     logging.info('Resource module not available, resource usage info won\'t be logged.')
 import sys
+import warnings
+warnings.filterwarnings("ignore")
 
 from collections import OrderedDict
 
@@ -823,7 +826,7 @@ Dependencies:
             if matches:
 
                 # REDUCE TO A SINGLE LIST
-                matches = set(reduce(operator.add, matches))
+                matches = set(functools.reduce(operator.add, matches))
 
                 #logging.info('Set reduce matches: {}'.format(smarts))
 
@@ -851,14 +854,14 @@ Dependencies:
                     atom.atom_types.discard(atom_type)
 
                 # ADD ATOM TYPES FROM DICTIONARY
-                for atom_type, atom_ids in PROT_ATOM_TYPES.iteritems():
+                for atom_type, atom_ids in PROT_ATOM_TYPES.items():
 
                     atom_id = residue.resname.strip() + atom.name.strip()
 
                     if atom_id in atom_ids:
                         atom.atom_types.add(atom_type)
 
-    with open(pdb_filename.replace('.pdb', '.atomtypes'), 'wb') as fo:
+    with open(pdb_filename.replace('.pdb', '.atomtypes'), 'w') as fo:
 
         if args.headers:
             fo.write('{}\n'.format('\t'.join(
@@ -1108,12 +1111,12 @@ Dependencies:
     all_terminal_residues = []
 
     try:
-        all_chain_break_residues = reduce(operator.add, chain_break_residues.values())
+        all_chain_break_residues = functools.reduce(operator.add, chain_break_residues.values())
     except TypeError:
         pass
 
     try:
-        all_terminal_residues = reduce(operator.add, chain_termini.values())
+        all_terminal_residues = functools.reduce(operator.add, chain_termini.values())
     except TypeError:
         pass
 
@@ -1513,7 +1516,7 @@ Dependencies:
     #    logging.info('Calculated per-atom SASA.')
 
     # CALCULATE PAIRWISE CONTACTS
-    with open(pdb_filename.replace('.pdb', '.contacts'), 'wb') as fo, open(pdb_filename.replace('.pdb', '.bs_contacts'), 'wb') as afo:
+    with open(pdb_filename.replace('.pdb', '.contacts'), 'w') as fo, open(pdb_filename.replace('.pdb', '.bs_contacts'), 'w') as afo:
 
         if args.headers:
             fo.write('{}\n'.format('\t'.join(
@@ -1851,7 +1854,7 @@ Dependencies:
         logging.info('Calculated pairwise contacts.')
 
     # WRITE OUT PER-ATOM SIFTS
-    with open(pdb_filename.replace('.pdb', '.sift'), 'wb') as fo, open(pdb_filename.replace('.pdb', '.specific.sift'), 'wb') as specific_fo:
+    with open(pdb_filename.replace('.pdb', '.sift'), 'w') as fo, open(pdb_filename.replace('.pdb', '.specific.sift'), 'w') as specific_fo:
 
         if args.headers:
             fo.write('{}\n'.format('\t'.join(
@@ -1903,7 +1906,7 @@ Dependencies:
 
     # WRITE OUT SIFT MATCHING
     # LIGAND AND BINDING SITE (`selection_plus`)
-    with open(pdb_filename.replace('.pdb', '.siftmatch'), 'wb') as fo, open(pdb_filename.replace('.pdb', '.specific.siftmatch'), 'wb') as specific_fo:
+    with open(pdb_filename.replace('.pdb', '.siftmatch'), 'w') as fo, open(pdb_filename.replace('.pdb', '.specific.siftmatch'), 'w') as specific_fo:
         for atom in selection_plus:
 
             sift_match = sift_match_base3(atom.potential_fsift, atom.actual_fsift) # WHICH SIFT TO USE?
@@ -1926,7 +1929,7 @@ Dependencies:
                                                        [human_sift_match(sift_match_water)]])))
 
     # WRITE OUT HBONDS/POLAR MATCHING
-    with open(pdb_filename.replace('.pdb', '.polarmatch'), 'wb') as fo, open(pdb_filename.replace('.pdb', '.specific.polarmatch'), 'wb') as specific_fo:
+    with open(pdb_filename.replace('.pdb', '.polarmatch'), 'w') as fo, open(pdb_filename.replace('.pdb', '.specific.polarmatch'), 'w') as specific_fo:
         for atom in selection_plus:
 
             # SUBJECT TO CHANGE
@@ -1953,7 +1956,7 @@ Dependencies:
     # `https://bitbucket.org/blundell/credovi/src/bc337b9191518e10009002e3e6cb44819149980a/credovi/structbio/aromaticring.py?at=default`
     # `https://bitbucket.org/blundell/credovi/src/bc337b9191518e10009002e3e6cb44819149980a/credovi/sql/populate.sql?at=default`
     # `http://marid.bioc.cam.ac.uk/credo/about`
-    with open(pdb_filename.replace('.pdb', '.ri'), 'wb') as fo:
+    with open(pdb_filename.replace('.pdb', '.ri'), 'w') as fo:
 
         if args.headers:
 
@@ -2093,7 +2096,7 @@ Dependencies:
                 fo.write('{}\n'.format('\t'.join([str(x) for x in output])))
 
     # RINGS AND ATOM-RING INTERACTIONS
-    with open(pdb_filename.replace('.pdb', '.ari'), 'wb') as fo, open(pdb_filename.replace('.pdb', '.rings'), 'wb') as ring_fo:
+    with open(pdb_filename.replace('.pdb', '.ari'), 'w') as fo, open(pdb_filename.replace('.pdb', '.rings'), 'w') as ring_fo:
 
         if args.headers:
 
@@ -2246,7 +2249,7 @@ Dependencies:
             ring_fo.write('{}\n'.format('\t'.join([str(x) for x in output])))
 
     # AMIDE-RING INTERACTIONS
-    with open(pdb_filename.replace('.pdb', '.amri'), 'wb') as fo:
+    with open(pdb_filename.replace('.pdb', '.amri'), 'w') as fo:
 
         if args.headers:
 
@@ -2354,7 +2357,7 @@ Dependencies:
                 fo.write('{}\n'.format('\t'.join([str(x) for x in output])))
 
     # AMIDE-AMIDE INTERACTIONS
-    with open(pdb_filename.replace('.pdb', '.amam'), 'wb') as fo:
+    with open(pdb_filename.replace('.pdb', '.amam'), 'w') as fo:
 
         if args.headers:
             fo.write('{}\n'.format('\t'.join(
@@ -2566,7 +2569,7 @@ Dependencies:
         residue.ring_amide_inter_sift = [1 if x else 0 for x in residue.ring_amide_inter_integer_sift]
         residue.amide_amide_inter_sift = [1 if x else 0 for x in residue.amide_amide_inter_integer_sift]
 
-    with open(pdb_filename.replace('.pdb', '.residue_sifts'), 'wb') as fo:
+    with open(pdb_filename.replace('.pdb', '.residue_sifts'), 'w') as fo:
 
         if args.headers:
 
