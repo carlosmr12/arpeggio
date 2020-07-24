@@ -11,7 +11,7 @@ notifications:
     on_failure: always
 
 before_install:
-  docker build -t arpeggio .
+  docker build -t cmiranda1/arpeggio .
 
 script:
-  - docker run --rm -it arpeggio python arpeggio.py -h
+  - docker run --rm -it cmiranda1/arpeggio python arpeggio.py -h
