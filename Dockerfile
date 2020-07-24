@@ -3,8 +3,8 @@ FROM continuumio/miniconda3
 RUN mkdir /arpeggio
 WORKDIR /arpeggio
 
-COPY requirements.yml /arpeggio
-RUN conda env update -f requirements.yml
+COPY requirements-docker.yml /arpeggio
+RUN conda env update -f requirements-docker.yml
 
 COPY config.py /arpeggio
 COPY arpeggio.py /arpeggio
