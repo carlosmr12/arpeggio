@@ -70,9 +70,9 @@ Arpeggio is written in Python and currently has the following dependencies:
 
 ### Dependencies
 
-- Python (v2.7)
+- Python (v3.6)
 - Numpy
-- BioPython (>= v1.60)
+- BioPython (>= v1.77)
 - OpenBabel (with Python bindings)
 
 ### Recommended
