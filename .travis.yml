@@ -11,8 +11,7 @@ notifications:
     on_failure: always
 
 before_install:
-  docker build -t harryjubb/arpeggio .
+  docker build -t arpeggio .
 
 script:
-  # SMOKE TEST
-  - docker run --rm -it harryjubb/arpeggio python arpeggio.py -h
+  - docker run --rm -it arpeggio python arpeggio.py -h
